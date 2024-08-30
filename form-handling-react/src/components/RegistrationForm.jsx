@@ -1,117 +1,76 @@
 import { useState } from "react";
 
-function RegistrationForm() {
+const RegistrationForm = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  // Function to handle form submission
+  const [errors, setErrors] = useState({});
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (validateForm()) {
-      console.log(`Username: ${username}, Email: ${email}, Password: ${password}`);
-    }
-  };
 
-  // Function to handle username input change
-  const handleUsernameChange = (e) => {
-    setUsername(e.target.value);
-  };
-
-  // Function to handle email input change
-  const handleEmailChange = (e) => {
-    setEmail(e.target.value);
-  };
-
-  // Function to handle password input change
-  const handlePasswordChange = (e) => {
-    setPassword(e.target.value);
-  };
-
-  // Function to validate fields
-  const validateFields = () => {
-    if (username.length === 0 || email.length === 0 || password.length === 0) {
-      alert("All fields are required");
-      return false;
-    }
-    return true;
-  };
-
-  // Function to validate form
-  const validateForm = () => {
-    const errors = {};
+    const validateErrors = {};
     if (!username) {
-      errors.username = "Username is required";
+      validateErrors.username = "Username is required";
     }
-    if (!email || !validateEmail(email)) {
-      errors.email = "Please enter a valid email address";
-    }
-    if (!password || password.length < 8) {
-      errors.password = "Password must be at least 8 characters long";
-    }
-    if (Object.keys(errors).length > 0) {
-      alert("Form validation failed");
-      return false;
-    }
-    return true;
-  };
 
-  // Simple email validation function
-  const validateEmail = (email) => {
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    return emailRegex.test(email);
-    };
-    //Password field validation
-    const validatePassword = (password) => {
-      const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-      return passwordRegex.test(password);
-    };
-    //Username field validation
-    const validateUsername = (username) => {
-      const usernameRegex = /^[a-zA-Z0-9_-]{3,16}$/;
-      return usernameRegex.test(username);
-    };
+    if (!email) {
+      validateErrors.email = "Email is required";
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
+      validateErrors.email = "Enter a valid email format";
+    }
+
+    if (!password) {
+      validateErrors.password = "Password is required";
+    } else if (password.length < 8) {
+      validateErrors.password = "Password must be longer than 8 characters";
+    }
+
+    setErrors(validateErrors);
+    console.log(
+      `Username: ${username}`,
+      `Email: ${email}`,
+      `Password: ${password}`
+    );
+  };
 
   return (
-      <form onSubmit={handleSubmit}>
-      <label for="UserName" className="form-label">UserName:</label>
+    <form
+      onSubmit={handleSubmit}
+      style={{ display: "flex", flexDirection: "column", gap: "6px" }}
+    >
       <input
         type="text"
-        id="UserName"
-        name="UserName"
+        placeholder="Username"
+        name="username"
         value={username}
-        onChange={handleUsernameChange}
-              required
-              className="form-input"
+        onChange={(e) => setUsername(e.target.value)}
       />
-      <br />
-
-      <label for="email" className="form-label">Email:</label>
+      {errors.username && (
+        <span style={{ color: "red" }}>{errors.username}</span>
+      )}
       <input
-        type="text"
-        id="email"
+        type="email"
+        placeholder="Email"
         name="email"
         value={email}
-        onChange={handleEmailChange}
-              required
-              className="form-input"
+        onChange={(e) => setEmail(e.target.value)}
       />
-      <br />
-
-      <label for="password" className="form-label">Password:</label>
+      {errors.email && <span style={{ color: "red" }}>{errors.email}</span>}
       <input
         type="password"
-        id="password"
+        placeholder="Password"
         name="password"
         value={password}
-        onChange={handlePasswordChange}
-              required
-              className="form-input"
+        onChange={(e) => setPassword(e.target.value)}
       />
-      <br />
-      <button className="form-btn">Submit</button>
+      {errors.password && (
+        <span style={{ color: "red" }}>{errors.password}</span>
+      )}
+      <button type="submit">Submit</button>
     </form>
   );
-}
+};
 
 export default RegistrationForm;
