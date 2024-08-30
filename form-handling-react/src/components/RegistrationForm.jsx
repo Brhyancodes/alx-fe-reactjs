@@ -79,6 +79,7 @@ function RegistrationForm() {
         type="text"
         id="UserName"
         name="UserName"
+        value={username}
         onChange={handleUsernameChange}
               required
               className="form-input"
@@ -90,6 +91,7 @@ function RegistrationForm() {
         type="text"
         id="email"
         name="email"
+        value={email}
         onChange={handleEmailChange}
               required
               className="form-input"
@@ -101,6 +103,7 @@ function RegistrationForm() {
         type="password"
         id="password"
         name="password"
+        value={password}
         onChange={handlePasswordChange}
               required
               className="form-input"
