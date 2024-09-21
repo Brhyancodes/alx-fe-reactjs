@@ -1,12 +1,38 @@
-import axios from 'axios';
+import axios from "axios";
 
-const apiKey = process.env.REACT_APP_GITHUB_API_KEY;
+async function fetchUserData(username, location, minRepos) {
+  let query = "";
 
-const githubService = axios.create({
-  baseURL: 'https://api.github.com',
-  headers: {
-    Authorization: `Bearer ${apiKey}`,
-  },
-});
+  if (username) {
+    query += `user:${username}`;
+  }
+  if (location) {
+    query += `location:${location}`;
+  }
+  if (minRepos) {
+    query += `repos:>${minRepos}`;
+  }
 
-export default githubService;
+  try {
+    const response = await axios.get(
+      `https://api.github.com/search/users?q=${query}`
+    );
+    return response.data.items;
+  } catch (error) {
+    throw error;
+  }
+  //     axios
+  //       // .get(`https://api.github.com/users/${username}`)
+  //       .get(`https://api.github.com/search/users?q=${query}`)
+  //       .then((response) => {
+  //
+  //         return response.data.items;
+  //       })
+  //       .catch((error) => {
+  //
+  //         throw error;
+  //       })
+  //   );
+}
+
+export default fetchUserData;
